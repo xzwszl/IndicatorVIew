@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="IndicatorView">
+        <attr name="space" format="dimension"/>
+        <attr name="scale" format="dimension"/>
+        <attr name="type" format="enum">
+            <enum name="oval" value="0"/>
+            <enum name="rectangle" value="1"/>
+        </attr>
+        <attr name="back_color" format="color"/>
+        <attr name="front_color" format="color"/>
+        <attr name="gravity" format="enum">
+            <enum name="left" value="0"/>
+            <enum name="center" value="1"/>
+            <enum name="right" value="2"/>
+        </attr>
+        <attr name="count" format="integer"/>
+
+    </declare-styleable>
+
+</resources>
