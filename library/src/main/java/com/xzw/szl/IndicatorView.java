@@ -21,8 +21,8 @@ public class IndicatorView extends View {
     private static final int DEFAULT_SCALE = 10;
 
 
-    private static final int DEFAULT_BACK_COLOR = 0x8F0893AD;
-    private static final int DEFAULT_FRONT_COLOR = 0xAF0893AD;
+    private static final int DEFAULT_BACK_COLOR = 0x8F666666;
+    private static final int DEFAULT_FRONT_COLOR = 0xFFFFFFFF;
 
     private static final int LEFT = 0;
     private static final int RIGHT = 2;
@@ -99,7 +99,7 @@ public class IndicatorView extends View {
      * @param position
      */
     public void setPosition(int position) {
-        setLocationWithRealOffest(position,0);
+        setLocationWithRealOffset(position, 0);
     }
 
     /**
@@ -108,13 +108,18 @@ public class IndicatorView extends View {
      */
     public void setLocationWithCoefficient(int position, float coefficient) {
 
-        float offest = (mScale + mSpace) * coefficient;
-        setLocationWithRealOffest(position,offest);
+        float offset = (mScale + mSpace) * coefficient;
+        setLocationWithRealOffset(position, offset);
     }
 
-    public void setLocationWithRealOffest(int position, float offest) {
+    public void setLocationWithRealOffset(int position, float offset) {
         mPosition = position;
-        mOffset = offest;
+        mOffset = offset;
+        invalidate();
+    }
+
+    public void setCount(int count) {
+        mCount = count;
         invalidate();
     }
 
