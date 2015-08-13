@@ -1,5 +1,5 @@
 # IndicatorView
-===============
+------
 
 A good indicator widget for show the current status or position of Items in ViewPager and other ViewContainers.
 support
