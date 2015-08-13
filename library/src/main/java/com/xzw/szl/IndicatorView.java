@@ -10,7 +10,7 @@ import android.view.View;
 import android.widget.TextView;
 
 /**
- * Created by xzwszl on 8/11/2015.
+ * Created by xzwszl on 8/11 * 0.5f015.
  */
 public class IndicatorView extends View {
 
@@ -48,6 +48,15 @@ public class IndicatorView extends View {
 
     private int mCount = 0;
 
+    private float startX;
+    private float startY;
+
+    private int mPosition;
+
+    private float mLocation;
+
+    private float mOffset;
+
     public IndicatorView(Context context) {
         super(context);
         init();
@@ -80,19 +89,102 @@ public class IndicatorView extends View {
         mPaddingLeft = getPaddingLeft();
         mPaddingRight = getPaddingRight();
         mPaddingBottom = getPaddingBottom();
-
         init();
 
     }
 
+    /**
+     * Set the position of frontindicator, the position is belong [0,Count]
+     * for example, 0 means the first place to locate this indicator.
+     * @param position
+     */
+    public void setPosition(int position) {
+        setLocationWithRealOffest(position,0);
+    }
+
+    /**
+     * @param position
+     * @param coefficient
+     */
+    public void setLocationWithCoefficient(int position, float coefficient) {
+
+        float offest = (mScale + mSpace) * coefficient;
+        setLocationWithRealOffest(position,offest);
+    }
+
+    public void setLocationWithRealOffest(int position, float offest) {
+        mPosition = position;
+        mOffset = offest;
+        invalidate();
+    }
+
+
     private void init() {
         mPaint = new Paint();
-
+        mPaint.setAntiAlias(true);
+        mPosition = 0;
+        mOffset = 0;
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        drawIndicator(canvas);
+    }
+
+    private void drawIndicator(Canvas canvas) {
+
+        switch (mGravity) {
+            case LEFT:
+                startX = getPaddingLeft();
+                break;
+            case RIGHT:
+                startX = getWidth() - getPaddingRight();
+
+                if (mCount > 0) {
+                    startX -= mScale * mCount + mSpace * (mCount -1);
+                }
+                break;
+            case CENTER:
+            default:
+                float mid = (getWidth() - getPaddingRight() + getPaddingLeft()) * 0.5f;
+                float length = mScale * mCount;
+
+                if (mCount >0) {
+                    length += mSpace * (mCount -1);
+                }
+
+                startX = mid - length * 0.5f;
+                break;
+        }
+
+        startY = (getHeight() + getPaddingTop() - getPaddingBottom() - mScale) * 0.5f;
+
+        mPaint.setColor(mBackInidcaotrColor);
+
+        float cur = startX;
+
+        for (int i = 0;i < mCount; i++) {
+
+            if (mType == INDICATOR_OVAL) {
+                canvas.drawCircle(cur+mScale * 0.5f, startY + mScale * 0.5f,mScale * 0.5f,mPaint);
+            } else if (mType == INDICATOR_RECTANGLE){
+                canvas.drawRect(cur,startY,cur+mScale,startY +mScale, mPaint);
+            }
+
+            if (mPosition == i) {
+                mLocation = cur + mOffset;
+            }
+            cur+= mScale+mSpace;
+        }
+
+        mPaint.setColor(mFrontIndicatorColor);
+
+        if (mType == INDICATOR_OVAL) {
+            canvas.drawCircle(mLocation+mScale * 0.5f, startY+mScale * 0.5f,mScale * 0.5f,mPaint);
+        } else if (mType == INDICATOR_RECTANGLE){
+            canvas.drawRect(mLocation,startY,mLocation + mScale,startY +mScale, mPaint);
+        }
     }
 
     @Override
@@ -129,7 +221,11 @@ public class IndicatorView extends View {
             height = (int) (mPaddingBottom +mPaddingTop);
 
             if(mCount > 0) {
-                height += mScale;
+                height = height + (int)mScale;
+            }
+
+            if (heightMode == MeasureSpec.AT_MOST) {
+                height = Math.max(height, getSuggestedMinimumHeight());
             }
         }
 
