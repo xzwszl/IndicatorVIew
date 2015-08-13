@@ -4,10 +4,11 @@
 A good indicator widget for show the current status or position of Items in ViewPager and other ViewContainers.
 support
 -----
+```text
 1) two kinds of shapes : rectangle and oval.
 2) three kinds of Gravity: left, center and right.
 3) easy to set from both code and xml.
-
+```
 
 ![IndecatorView] (https://github.com/xzwszl/IndicatorVIew/blob/master/picture/Screenshot_2015-08-13-17-19-39.png)
 
