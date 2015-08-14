@@ -9,7 +9,7 @@ Support
 2) three kinds of Gravity: left, center and right.
 3) easy to set from both code and xml.
 ```
-![IndecatorView](https://github.com/xzwszl/IndicatorVIew/blob/master/picture/insta.gif)
+![IndecatorView](https://github.com/xzwszl/IndicatorVIew/blob/master/picture/yff.gif)
 ![IndecatorView] (https://github.com/xzwszl/IndicatorVIew/blob/master/picture/Screenshot_2015-08-13-17-19-39.png)
 
 Usage
