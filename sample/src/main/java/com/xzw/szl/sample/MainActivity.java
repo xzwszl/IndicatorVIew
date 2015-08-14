@@ -30,8 +30,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void init() {
 
-        String a = Environment.getExternalStorageDirectory().toString();
-
         iv = (IndicatorView) findViewById(R.id.iv_test);
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.vp_container);
