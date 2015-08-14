@@ -3,4 +3,10 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+
+    <string name="location_left">location Left</string>
+    <string name="location_center">location Center</string>
+    <string name="location_right">location Right</string>
+    <string name="shape_oval">Shape Oval</string>
+    <string name="shape_rect">Shape Rectangle</string>
 </resources>

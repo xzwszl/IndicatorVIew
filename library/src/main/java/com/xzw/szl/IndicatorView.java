@@ -3,19 +3,18 @@ package com.xzw.szl;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
+import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.TextView;
 
 /**
- * Created by xzwszl on 8/11 * 0.5f015.
+ * Created by xzwszl on 8/11/2015.
  */
 public class IndicatorView extends View {
 
-    private static final int INDICATOR_OVAL = 0;
-    private static final int INDICATOR_RECTANGLE = 1;
+    public static final int INDICATOR_OVAL = 0;
+    public static final int INDICATOR_RECTANGLE = 1;
 
     private static final int DEFAULT_SPACE = 10;
     private static final int DEFAULT_SCALE = 10;
@@ -24,18 +23,12 @@ public class IndicatorView extends View {
     private static final int DEFAULT_BACK_COLOR = 0x8F666666;
     private static final int DEFAULT_FRONT_COLOR = 0xFFFFFFFF;
 
-    private static final int LEFT = 0;
-    private static final int RIGHT = 2;
-    private static final int CENTER = 1;
+    public static final int LEFT = 0;
+    public static final int RIGHT = 2;
+    public static final int CENTER = 1;
 
-
-    private float mPaddingTop;
-    private float mPaddingLeft;
-    private float mPaddingRight;
-    private float mPaddingBottom;
     private float mSpace; //间隔
     private float mScale; //圆 直径,正方形 边长
-
 
     private int mBackInidcaotrColor;
     private int mFrontIndicatorColor;
@@ -52,10 +45,12 @@ public class IndicatorView extends View {
     private float startY;
 
     private int mPosition;
-
     private float mLocation;
-
     private float mOffset;
+
+    private ViewPager mViewPager;
+
+    private ViewPager.OnPageChangeListener pageChangeListener;
 
     public IndicatorView(Context context) {
         super(context);
@@ -85,12 +80,18 @@ public class IndicatorView extends View {
 
         a.recycle();
 
-        mPaddingTop = getPaddingTop();
-        mPaddingLeft = getPaddingLeft();
-        mPaddingRight = getPaddingRight();
-        mPaddingBottom = getPaddingBottom();
         init();
 
+    }
+    public void setGravity(int gravity) {
+
+        mGravity = gravity;
+        invalidate();
+    }
+
+    public void setType(int type) {
+        mType = type;
+        invalidate();
     }
 
     /**
@@ -129,6 +130,24 @@ public class IndicatorView extends View {
         mPaint.setAntiAlias(true);
         mPosition = 0;
         mOffset = 0;
+    }
+
+    public void setViewPager(ViewPager viewPager) {
+        mViewPager = viewPager;
+
+        if (mViewPager != null) {
+
+            if (mViewPager.getAdapter() == null) {
+                throw  new NullPointerException("The adapter of viewpager must not be nul1");
+            }
+
+            mCount = mViewPager.getAdapter().getCount();
+            mViewPager.addOnPageChangeListener(new PageChangeListener());
+        }
+    }
+
+    public void addOnPageChangeListener(ViewPager.OnPageChangeListener pageChangeListener) {
+        this.pageChangeListener = pageChangeListener;
     }
 
     @Override
@@ -194,7 +213,6 @@ public class IndicatorView extends View {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
         int widthMode = MeasureSpec.getMode(widthMeasureSpec);
         int heightMode = MeasureSpec.getMode(heightMeasureSpec);
@@ -208,7 +226,7 @@ public class IndicatorView extends View {
             width = widthSize;
         } else {
 
-            width = (int) (mPaddingLeft + mPaddingRight);
+            width = getPaddingLeft() + getPaddingRight();
 
             if (mCount > 0) {
                 width += mCount * mScale + (mCount-1) * mSpace;
@@ -223,7 +241,7 @@ public class IndicatorView extends View {
             height = heightSize;
         } else {
 
-            height = (int) (mPaddingBottom +mPaddingTop);
+            height = getPaddingBottom() + getPaddingTop();
 
             if(mCount > 0) {
                 height = height + (int)mScale;
@@ -235,5 +253,35 @@ public class IndicatorView extends View {
         }
 
         setMeasuredDimension(width, height);
+    }
+
+    class PageChangeListener implements ViewPager.OnPageChangeListener {
+
+        @Override
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            setLocationWithCoefficient(position, positionOffset);
+
+            if (pageChangeListener != null) {
+                pageChangeListener.onPageScrolled(position, positionOffset, positionOffsetPixels);
+            }
+        }
+
+        @Override
+        public void onPageSelected(int position) {
+
+            if (pageChangeListener != null) {
+                pageChangeListener.onPageSelected(position);
+            }
+
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int state) {
+
+            if (pageChangeListener != null) {
+                pageChangeListener.onPageSelected(state);
+            }
+        }
     }
 }
